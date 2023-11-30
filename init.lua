@@ -46,6 +46,27 @@ vim.g.maplocalleader = ' '
 vim.api.nvim_set_keymap('i', 'jk', '<Esc>', { noremap = true })
 
 
+-- toggle term
+-- Define a function to toggle the terminal window and save the buffer
+function ToggleTermAndSave()
+    if vim.bo.modified then    -- Check if the buffer is modified
+        vim.cmd('w')           -- Save the buffer if modified
+    end
+    vim.cmd('ToggleTerm')      -- Open Toggle Term
+end
+
+-- Map Ctrl+Space to toggle the terminal window and save the buffer in normal mode
+vim.api.nvim_set_keymap('n', '<leader>t', ':lua ToggleTermAndSave()<CR>', { noremap = true, silent = true })
+
+-- Map Ctrl+Space in terminal mode to close the terminal if open
+vim.api.nvim_set_keymap('t', '<C-Space>', '<C-\\><C-n>:ToggleTerm<CR>', { noremap = true, silent = true })
+
+
+
+-- neotree
+-- Map space n t to toggle NeoTree in normal mode
+vim.api.nvim_set_keymap('n', '<space>nt', ':NeoTree toggle<CR>', { noremap = true, silent = true })
+
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -316,7 +337,7 @@ require('nvim-treesitter.configs').setup {
   ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-  auto_install = false,
+  auto_install = true,
 
   highlight = { enable = true },
   indent = { enable = true },
